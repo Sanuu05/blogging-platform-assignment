@@ -7,6 +7,8 @@ const { authenticateToken } = require("../middleware/authMiddleware");
 router.post("/", authenticateToken, postController.createPost);
 // Get all posts
 router.get("/", postController.getPosts);
+// Get my posts
+router.get("/my-posts", authenticateToken, postController.getMyPosts);
 // Get a post by id
 router.get("/:id", postController.getPostById);
 // Update a post

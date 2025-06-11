@@ -48,6 +48,9 @@ exports.getPosts = async (req, res) => {
                 }
             },
             {
+                $sort: { createdAt: -1 }
+            },
+            {
                 $project: {
                     title: 1,
                     content: 1,
@@ -74,6 +77,17 @@ exports.getPostById = async (req, res) => {
             return res.status(404).json({ message: "Post not found" });
         }
         res.status(200).json({ message: "Post fetched successfully", data: post });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+exports.getMyPosts = async (req, res) => {
+    try {
+        const posts = await Post.find({ author: req.user.id }).populate("author", "name");
+        if (!posts) {
+            return res.status(404).json({ message: "No posts found" });
+        }
+        res.status(200).json({ message: "Posts fetched successfully", data: posts });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
